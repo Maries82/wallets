@@ -2,45 +2,44 @@
 package io.paxs.cryptos.dao;
 
 
-
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import io.paxs.cryptos.domain.SimpleUser;
 import io.paxs.cryptos.domain.User;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
 
-    public DataSource connect(){
-        DataSource dataSource;
+    JdbcConnector connector = new JdbcConnector();
 
-        try {
-            Context  context= new InitialContext();
-            dataSource = (DataSource) context.lookup("java:/cryptos");
-        } catch (NamingException e) {
-            MysqlDataSource mysqlDataSource = new MysqlDataSource();
-            mysqlDataSource.setUser("root");
-            mysqlDataSource.setPassword("");
-            mysqlDataSource.setServerName("localhost");
-            mysqlDataSource.setDatabaseName("cryptos");
-            mysqlDataSource.setPort(3306);
+    public List<User> listUsers() throws SQLException {
 
-            dataSource = mysqlDataSource;
+        List<User> users = new ArrayList<>();
+
+        Connection conn = this.connector.getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM user");
+
+        while(rs.next()){
+            String name = rs.getString("name");
+            int id = rs.getInt("id");
+            System.out.println(name + ":" +id);
+            users.add(new SimpleUser(id,name));
         }
 
-        return dataSource;
-    }
+        rs.close();
+        stmt.close();
+        conn.close();
 
+        return users;
+    }
 
     public int createUser(String name) throws SQLException {
         String query = "INSERT INTO users(name,user_id) VALUES(?,?)";
         System.out.println(query);
 
-        Connection conn = connect().getConnection();
+        Connection conn = this.connector.getConnection();
         PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         stmt.setString(1,name);
 
@@ -65,7 +64,7 @@ public class UserDao {
         String query = "DELETE FROM user WHERE id=?";
         //System.out.println(query);
 
-        Connection conn = connect().getConnection();
+        Connection conn = this.connector.getConnection();
         PreparedStatement stmt = conn.prepareStatement(query);
         stmt.setInt(1,userId);
         stmt.executeUpdate();
@@ -74,16 +73,52 @@ public class UserDao {
         conn.close();
     }
 
-    public List<User> findByName(String extract){
-        return null;
+    public List<User> findByName(String extract) throws SQLException {
+
+        String query = "SELECT * FROM user WHERE name LIKE ?";
+        List<User> users = new ArrayList<>();
+
+        Connection conn = this.connector.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, extract + "%");
+        ResultSet rs = stmt.executeQuery();
+
+
+        while (rs.next()) {
+
+            String name = rs.getString("name");
+            int id = rs.getInt("id");
+            users.add(new SimpleUser(id, name));
+            System.out.println("resp = " + id + name);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return users;
     }
 
     public void deleteByName(String exactName){
 
     }
 
-    public void updateUser(int userId, String newName){
+    public void updateUser(int userId, String newName)throws SQLException{
 
+        //on veut chercher le nom du user par l'id et modifier juste le nom
+
+        String query = "UPDATE user SET name = ? WHERE id = ? ";
+
+        Connection conn = this.connector.getConnection();
+        PreparedStatement statement = conn.prepareStatement(query);
+
+        statement.setString(1,newName);
+        statement.setInt(2,userId);
+
+        statement.executeUpdate();
+        statement.close();
+        conn.close();
     }
 
     public void deleteWalletUser(int userId){
