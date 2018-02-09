@@ -9,11 +9,30 @@ export class DataService {
 
   fetchUsers(): Promise<User[]>{
 
+    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
     return this.http
       .get('http://localhost:8080/cryptos/api/users')
       .toPromise()
-      .then(json => json as User[])
+      .then(data => {
+
+    console.log(data);
+    return data as User[]
+
+  })
+}
+
+fetchUserWithWallets(user:User):Promise<User>{
+
+  let url = 'http://localhost:8080/cryptos/api/users/'+user.id;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(data => {
+
+        console.log('user with wallet: ',data);
+        return data as User
+      })
+
 
   }
-
 }

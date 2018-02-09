@@ -160,10 +160,10 @@ public class WalletDao {
         //dao.createWallet(5,"Yoloni");
        // dao.createWallet(8,"Nana");
         //System.out.println(dao.findByName("Yo"));
-        dao.updateWallet(2,"serieux22");
+        dao.createWallet(12,"serieux22");
         //dao.deleteByName("Nana");
         //System.out.println(dao.deleteByName("Yolo"));
-        dao.deleteAll(12);
+
        //new WalletDao().deleteWallet(27);
     }
 }

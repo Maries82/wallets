@@ -2,8 +2,7 @@
 package io.paxs.cryptos.dao;
 
 
-import io.paxs.cryptos.domain.SimpleUser;
-import io.paxs.cryptos.domain.User;
+import io.paxs.cryptos.domain.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,6 +32,45 @@ public class UserDao {
         conn.close();
 
         return users;
+    }
+
+    public User findUserWithWallets(int userId) throws SQLException{
+        Connection connection = connector.getConnection();
+
+        String query="SELECT * FROM wallet w RIGHT JOIN user u ON w.user_id = u.id WHERE u.id=?";
+
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1,userId);
+
+        ResultSet rs = statement.executeQuery();
+
+        User user = null;
+
+        //pro tip : always init lists
+        List<Wallet> wallets = new ArrayList<>();
+
+        while (rs.next()){
+
+            String userName = rs.getString("u.name");
+            System.out.println("userName:" + userName);
+            user = new FullUser(userId,userName,wallets);
+
+            int walletId = rs.getInt("w.id");
+            String walletName = rs.getString("w.name");
+
+            if (walletId > 0){
+            Wallet wallet = new SimpleWallet(walletId, walletName);
+            wallets.add(wallet);
+            }
+        }
+
+        rs.close();
+        statement.close();
+        connection.close();
+
+        return user;
+
+
     }
 
     public int createUser(String name) throws SQLException {
@@ -100,7 +138,16 @@ public class UserDao {
         return users;
     }
 
-    public void deleteByName(String exactName){
+    public void deleteByName(String exactName) throws SQLException{
+        String query = "DELETE FROM user WHERE name =?";
+
+        Connection conn = this.connector.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1,exactName);
+        stmt.executeUpdate();
+
+        stmt.close();
+        conn.close();
 
     }
 
@@ -123,6 +170,13 @@ public class UserDao {
 
     public void deleteWalletUser(int userId){
         // delete wallets, then delete User
+    }
+
+    public static void main(String[] args) throws SQLException {
+        UserDao dao = new UserDao();
+
+        System.out.println(dao.findUserWithWallets(2));
+
     }
 }
 
