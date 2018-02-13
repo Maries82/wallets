@@ -1,4 +1,6 @@
-package io.paxs.cryptos.domain;
+package io.paxs.cryptos.domain.jdbc;
+
+import io.paxs.cryptos.domain.jpa.Wallet;
 
 import java.util.List;
 

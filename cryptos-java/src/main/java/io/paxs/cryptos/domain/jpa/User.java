@@ -1,4 +1,4 @@
-package io.paxs.cryptos.domain;
+package io.paxs.cryptos.domain.jpa;
 
 import java.util.List;
 

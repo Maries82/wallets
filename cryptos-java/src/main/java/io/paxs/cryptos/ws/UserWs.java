@@ -1,9 +1,9 @@
 package io.paxs.cryptos.ws;
 
 import io.paxs.cryptos.dao.UserDao;
-import io.paxs.cryptos.domain.FullUser;
-import io.paxs.cryptos.domain.User;
-import io.paxs.cryptos.domain.Wallet;
+import io.paxs.cryptos.domain.jdbc.FullUser;
+import io.paxs.cryptos.domain.jpa.User;
+import io.paxs.cryptos.domain.jpa.Wallet;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

@@ -1,11 +1,14 @@
-package io.paxs.cryptos.domain;
+package io.paxs.cryptos.domain.jdbc;
+
+import io.paxs.cryptos.domain.jpa.User;
+import io.paxs.cryptos.domain.jpa.Wallet;
 
 import java.util.Optional;
 
 /**
  * Created by AELION on 06/02/2018.
  */
-public class SimpleWallet implements Wallet{
+public class SimpleWallet implements Wallet {
 
     int id;
     String name;

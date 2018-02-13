@@ -55,12 +55,9 @@ export class DataService {
 
   createUser(user: User) {
     let url = 'http://localhost:8080/cryptos/api/users';
-    let dto = {
-      name:user.name,
 
-    }
     //when posting, we sent DATA to the url
-    return this.http.post(url, dto)
+    return this.http.post(url, user.name)
       .toPromise()
       .then(data => console.log('success :)', data))
     //.catch(e => console.error('Fail :(', e))
