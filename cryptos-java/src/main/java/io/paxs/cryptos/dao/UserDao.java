@@ -3,7 +3,6 @@ package io.paxs.cryptos.dao;
 
 
 import io.paxs.cryptos.domain.*;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,28 +73,29 @@ public class UserDao {
     }
 
     public int createUser(String name) throws SQLException {
-        String query = "INSERT INTO users(name,user_id) VALUES(?,?)";
-        System.out.println(query);
+                  //most important stuff: never ever string concatenation in JDBC
+            String query = "INSERT INTO user (name) VALUES (?)";
 
-        Connection conn = this.connector.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(1,name);
+            //System.out.println(query);
 
-        stmt.executeUpdate();
+            Connection conn = this.connector.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, name);
+            //stmt.executeUpdate();
+            int rows = stmt.executeUpdate(); // stmt.executeUpdate(query); le prepare le fait deja
 
-        /*int rows = stmt.executeUpdate(query);
-        if( rows != 1){
-            throw new SQLException("Something wrong happened with :" + query);
-        }*/
+            if(rows != 1){
+                throw new SQLException("Something wrong happened with : "+ query);
+            }
 
-        ResultSet keys = stmt.getGeneratedKeys();
-        keys.next();
-        int id = keys.getInt(1);
+            ResultSet keys = stmt.getGeneratedKeys(); // 1 seul clé
+            keys.next();
+            int id  = keys.getInt(1);
 
-        stmt.close();
-        conn.close();
+            stmt.close();
+            conn.close();
+            return id;
 
-        return  id;
     }
 
     public void deleteUser(int userId) throws SQLException {
@@ -173,9 +173,13 @@ public class UserDao {
     }
 
     public static void main(String[] args) throws SQLException {
-        UserDao dao = new UserDao();
+        UserDao userDao = new UserDao();
 
-        System.out.println(dao.findUserWithWallets(2));
+
+        System.out.println( userDao.createUser("Titi"));
+        //userDao.deleteUser(3);
+        //userDao.updateUser(3,"newname");
+        System.out.println(userDao.findUserWithWallets(2));
 
     }
 }
