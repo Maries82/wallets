@@ -1,9 +1,7 @@
 package io.paxs.cryptos.domain.jpa;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +15,9 @@ public class JpaUser implements User{
             @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
     String name;
-    //List<Wallet> wallets = new ArrayList<>();
+
+    @OneToMany
+    List<JpaWallet> wallets = new ArrayList<>();
 
 
 
@@ -32,10 +32,9 @@ public class JpaUser implements User{
     }
 
    @Override
-    public List<Wallet> getWallets() {
-    //    return wallets;
+    public List<JpaWallet> getWallets() {
+     return this.wallets;
 
-       return null;
    }
 
     public void setId(int id) {
@@ -46,7 +45,8 @@ public class JpaUser implements User{
         this.name = name;
     }
 
-   public void setWallets(List<Wallet> wallets) {
-    //    this.wallets = wallets;
-   }
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

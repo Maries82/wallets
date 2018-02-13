@@ -7,6 +7,8 @@ import java.util.Optional;
  */
 public interface Wallet {
     int getId();
-    Optional<User> getUser();
+    default Optional<User> getUser(){
+        return null;
+    }
     String getName();
 }
