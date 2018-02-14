@@ -1,10 +1,11 @@
 package io.paxs.cryptos.ws;
 
 import io.paxs.cryptos.dao.WalletDao;
-import io.paxs.cryptos.domain.jdbc.FullWallet;
-import io.paxs.cryptos.domain.jdbc.SimpleUser;
 import io.paxs.cryptos.domain.User;
 import io.paxs.cryptos.domain.Wallet;
+import io.paxs.cryptos.domain.jdbc.FullWallet;
+import io.paxs.cryptos.domain.jdbc.SimpleUser;
+import io.paxs.cryptos.jpa.JpaWalletDao;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -25,6 +26,12 @@ public class WalletWs {
     public List<Wallet> getWallets() throws SQLException {
         WalletDao dao = new WalletDao();
         return dao.listWallets();
+    }
+
+    @GET
+    @Path("{id}")
+    public Wallet getWallet(@PathParam("id") int walletId){
+        return new JpaWalletDao().getWallet(walletId);
     }
 
     //JaxRS annotations

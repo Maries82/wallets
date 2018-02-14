@@ -48,11 +48,20 @@ public class JpaLine implements Line{
         this.quantity = quantity;
     }
 
+
     public JpaWallet getWallet() {
         return wallet;
     }
 
     public void setWallet(JpaWallet wallet) {
         this.wallet = wallet;
+    }
+
+    @Override
+    public String toString() {
+        return "JpaLine{" +
+                "symbol='" + symbol + '\'' +
+                ", wallet=" + wallet +
+                '}';
     }
 }
