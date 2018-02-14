@@ -1,12 +1,13 @@
 package io.paxs.cryptos.ws;
 
+import io.paxs.cryptos.business.WalletBusiness;
 import io.paxs.cryptos.dao.WalletDao;
 import io.paxs.cryptos.domain.User;
 import io.paxs.cryptos.domain.Wallet;
 import io.paxs.cryptos.domain.jdbc.FullWallet;
 import io.paxs.cryptos.domain.jdbc.SimpleUser;
-import io.paxs.cryptos.jpa.JpaWalletDao;
 
+import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
@@ -22,6 +23,9 @@ import java.util.Optional;
 @Consumes(MediaType.APPLICATION_JSON)
 public class WalletWs {
 
+    @EJB
+    WalletBusiness walletBusiness;
+
     @GET
     public List<Wallet> getWallets() throws SQLException {
         WalletDao dao = new WalletDao();
@@ -31,7 +35,8 @@ public class WalletWs {
     @GET
     @Path("{id}")
     public Wallet getWallet(@PathParam("id") int walletId){
-        return new JpaWalletDao().getWallet(walletId);
+        return walletBusiness.findWallet(walletId);
+
     }
 
     //JaxRS annotations
