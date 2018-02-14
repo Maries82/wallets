@@ -1,5 +1,7 @@
 package io.paxs.cryptos.domain.jpa;
 
+import io.paxs.cryptos.domain.User;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
  */
 
 @Entity
-public class JpaUser implements User{
+public class JpaUser implements User {
 
     @Id
             @GeneratedValue(strategy = GenerationType.AUTO)

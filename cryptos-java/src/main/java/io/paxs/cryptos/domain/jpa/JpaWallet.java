@@ -1,5 +1,7 @@
 package io.paxs.cryptos.domain.jpa;
 
+import io.paxs.cryptos.domain.Wallet;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

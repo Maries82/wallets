@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
  */
 public class JpaConnector {
 
-    EntityManagerFactory factory;
+    static EntityManagerFactory factory;
 
     void connect(){
         if(this.factory == null){
@@ -19,7 +19,7 @@ public class JpaConnector {
         }
     }
 
-    public EntityManager createEntityManagerFactory(){
+    public EntityManager createEntityManager(){
 
         // if already connected, do nothing
         this.connect();
@@ -34,7 +34,7 @@ public class JpaConnector {
     public static void main(String[] args) {
         JpaConnector connector = new JpaConnector();
 
-        EntityManager em = connector.createEntityManagerFactory();
+        EntityManager em = connector.createEntityManager();
 
         JpaUser jean = new JpaUser();
         jean.setName("Jean");

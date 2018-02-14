@@ -2,7 +2,7 @@ package io.paxs.cryptos.jpa;
 
 import io.paxs.cryptos.domain.jpa.JpaUser;
 import io.paxs.cryptos.domain.jpa.JpaWallet;
-import io.paxs.cryptos.domain.jpa.User;
+import io.paxs.cryptos.domain.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -16,13 +16,13 @@ public class JpaUserDao {
     JpaConnector connector = new JpaConnector();
 
 
-    public User createUser(String name) {
+    public JpaUser createUser(String name) {
 
         //1 creation du user
         JpaUser user = new JpaUser();
         user.setName(name);
 
-        EntityManager em = connector.createEntityManagerFactory();
+        EntityManager em = connector.createEntityManager();
         em.getTransaction().begin();
         em.persist(user);
 
@@ -43,8 +43,8 @@ public class JpaUserDao {
 
     }
 
-    public User find(int id) {
-        EntityManager em = connector.createEntityManagerFactory();
+    public JpaUser find(int id) {
+        EntityManager em = connector.createEntityManager();
         em.getTransaction().begin();
 
         JpaUser user = em.find(JpaUser.class, id);
@@ -54,8 +54,8 @@ public class JpaUserDao {
         return user;
     }
 
-    public User findByName(String name) {
-        EntityManager em = connector.createEntityManagerFactory();
+    public JpaUser findByName(String name) {
+        EntityManager em = connector.createEntityManager();
         em.getTransaction().begin();
 
         //JPQL : Java Persistence Query Language
@@ -75,8 +75,8 @@ public class JpaUserDao {
         }
     }
 
-    public User deletByName(String name) {
-        EntityManager em = connector.createEntityManagerFactory();
+    public JpaUser deletByName(String name) {
+        EntityManager em = connector.createEntityManager();
         em.getTransaction().begin();
 
         //JPQL : Java Persistence Query Language
